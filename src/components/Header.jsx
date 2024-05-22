@@ -5,11 +5,24 @@ import { TfiEmail } from "react-icons/tfi";
 import { FaRegUserCircle } from "react-icons/fa";
 
 import { FaUserCircle } from "react-icons/fa";
+import { useLogin } from '../hooks/useLogin';
 
 
 
 
 export default function Header() {
+  const {logged, cambiarLogged, logout}=useLogin()
+  // const {btnCerrarSesion, setBtnCerrarSesion} =
+
+ // console.log(logged)
+ const icono = ()=>{
+  if(logged.estaLogueado){
+    return <button onClick={()=>logout()}>CERRAR SESIÓN</button> 
+    //<FaUserCircle onClick={()=>logout()}/>
+  }else{
+    return <FaRegUserCircle />
+  }
+ }
   return (
     <header className={style.header}>
       <img
@@ -22,8 +35,9 @@ export default function Header() {
       <FaPhoneAlt />
       <span>(+34)952 100 077</span>
       <TfiEmail />
-      <FaRegUserCircle />
-      {/* <FaUserCircle /> */}
+      {icono()}
+      {/* <FaRegUserCircle />
+      <FaUserCircle /> */}
       </div>
       
 
