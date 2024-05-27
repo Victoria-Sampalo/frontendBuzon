@@ -159,3 +159,18 @@ export const getCountInvoicesAdminFilters = async (token,filtros) => {
     const data = await response.json();
     return data.data
 }
+
+
+export const getAllDevelopment = async (token) => {
+    const url = `${import.meta.env.VITE_API}/alldevelopment`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    if(response.status === 409) return { error: true, message: 'Token no válido' };
+    const data = await response.json();
+    return data.data;
+  };

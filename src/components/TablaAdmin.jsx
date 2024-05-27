@@ -106,9 +106,9 @@ const TablaAdmin = ()=>{
                 <td>{formatDate(order.registration_date)}</td>
                 <td>{order.concept}</td>
                 <td>{order.amount} €</td>
-                <td><button>{order.status}</button></td>
+                <td><span className={`${style.spanstatus} ${style[order.status.toLowerCase()]}`}>{order.status}</span></td>
                 <td>
-                  <button>Reportar</button>
+                  <button className={style.btnError}>Reportar</button>
                 </td>
                 <td className={style.iconos}>
                   <FaFileDownload className={style.icono} />
@@ -144,31 +144,6 @@ const TablaAdmin = ()=>{
       )}
       </div>
     )
-
-
-    // if (invoices != null) return (
-    //     <div >
-    //       <h2>PORTAL DE ADMINISTRADOR</h2>
-    //       <button>SUBIR FACTURA</button>
-
-    //       {invoices.length == 0 && <p>TODAVÍA NO HAS HECHO NINGÚN PEDIDO</p>}
-    //       {invoices.map((order) => {
-    //         return (
-    //             <div  >
-    //               <p>Nº PEDIDO: {order.id}</p>
-                  
-    //               <p>{order.company}</p>
-    //             </div>          
-    //         )
-    //       })}
-    //       <button onClick={()=>cambiarPagina('+')}>+</button>
-    //       <p>{(offset!=0)?offset/limit:offset}</p>
-    //       <button onClick={()=>cambiarPagina('-')}>-</button>
-    //     </div>
-    //   )
-    //   else {
-    //     <p>No hay facturas</p>
-    //   }
 
 }
 

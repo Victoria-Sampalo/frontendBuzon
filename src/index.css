@@ -8,10 +8,17 @@
   --color-gris-claro: #d1ccc9;
   --color-gris-oscuro: #676767;
   --color-gris-oscuro-plus: #333334;
-  --color-estado-pagado:#35CF43;
-  --color-estado-preparando:#F2A516;
-  --color-estado-enviado:#16BDF2;
-  --color-estado-entregado:#C33266;
+  --color-estado-paid:#6ADF92;
+  --color-estado-paid-borde:#498D60;
+  --color-estado-sent:#FFF5BF;
+  --color-estado-sent-borde:#FFDB20;
+  --color-estado-pending:#F0A03D;
+  --color-estado-pending-borde:#C97814;
+  --color-estado-error:#E4724E;
+  --color-estado-error-borde:#8F2D0E;
+  --color-estado-rejected:#C33266;
+  --color-estado-rejected-borde:#721d3c;
+
   --color-estado-light-amarillo:#FFEFD1;
 }
 
@@ -129,12 +136,6 @@ button:hover{
 
 
 
-
-
-
-
-
-
 ul,
 li {
   list-style: none;
@@ -142,61 +143,10 @@ li {
   margin: 0;
 }
 
-main#mainprincipal {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-}
-
-#cabeceramostrarprecios {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -ms-flex-line-pack: center;
-  align-content: center;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  padding: 0 2rem;
-}
-
-.botonpdf {
-  display: block;
-  color: white;
-  padding: 1rem;
-  border: solid 1px white;
-  max-width: fit-content;
-  text-decoration: none;
-}
 
 
-#cabeceramostrarprecios{
-  padding: 0 8%;
-}
 
-#contenedorBotonPDF {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-line-pack: center;
-  align-content: center;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  padding: 2rem 2rem 0 2rem;
-  background-color: var(--color-azul-oscuro);
-}
+
 
 #contenedorMain{
   display: flex;

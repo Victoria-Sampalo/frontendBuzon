@@ -5,6 +5,7 @@
     justify-content: center;
     align-items: center;
     padding: 2rem;
+    color:var(--color-azul-oscuro)
 }
 
 h2{
@@ -99,3 +100,62 @@ h2{
   
   }
 
+
+  .spanstatus {
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    color: var(--color-azul-oscuro);
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+  }
+  
+  .sent {
+    background-color:var(--color-estado-sent);
+    border:1px solid var(--color-estado-sent-borde);
+  }
+  
+  .pending {
+    background-color:var(--color-estado-pending);
+    border:1px solid var(--color-estado-pending-borde);
+  }
+  
+  .paid {
+    background-color:var(--color-estado-paid);
+    border:1px solid var(--color-estado-paid-borde);
+  }
+  
+  .error {
+    background-color:var(--color-estado-error);
+    border:1px solid var(--color-estado-error-borde);
+  }
+  
+  .rejected {
+    background-color:var(--color-estado-rejected);
+    border:1px solid var(--color-estado-rejected-borde);
+  }
+  
+  .btnError {
+    background-color: var(--color-estado-error);
+    border:2px solid var(--color-estado-error-borde);
+    padding: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center; 
+    font-size: 13pt;
+    border-radius: 5px;
+    color: var(--color-azul-oscuro);
+    
+    
+  }
+  
+  .iconos {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .icono {
+    font-size: 2rem;
+    cursor: pointer;
+  }
+  
