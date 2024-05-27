@@ -71,3 +71,60 @@ export const tokenUser = async (token) => {
 //     const data = await response.json();
 //     return data.data
 // }
+
+
+export const getAllInvoicesNormal = async (token, id) => {
+    const datos = {
+        user_id:id,
+    };
+    const url=`${import.meta.env.VITE_API}/invoicesfromuser`
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body:JSON.stringify(datos)
+    });
+    if(response.status==409) return {error:true,message:'Token no valido'}
+    const data = await response.json();
+    return data.data
+}
+
+
+export const getAllInvoicesAdmin = async (token,limit, offset) => {
+    const datos = {
+        limit,
+        offset,
+    };
+    const url=`${import.meta.env.VITE_API}/allinvoices`
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body:JSON.stringify(datos)
+    });
+    if(response.status==409) return {error:true,message:'Token no valido'}
+    const data = await response.json();
+    return data.data
+}
+
+
+
+export const getCountInvoices = async (token) => {
+   
+    const url=`${import.meta.env.VITE_API}/countinvoices`
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        
+    });
+    if(response.status==409) return {error:true,message:'Token no valido'}
+    const data = await response.json();
+    return data.data
+}
