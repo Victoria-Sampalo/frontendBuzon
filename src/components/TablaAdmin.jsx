@@ -3,8 +3,11 @@ import { useState, useEffect } from "react";
 // import styles from "../styles/Login.module.css";
 import { useNavigate } from 'react-router-dom';
 import { obtenerToken } from "../lib/serviceToken";
-import { getAllInvoicesAdmin, getCountInvoices } from "../lib/data";
-
+import { getAllInvoicesAdmin, getCountInvoicesAdminFilters } from "../lib/data";
+import style from '../styles/TablaAdmin.module.css';
+import { FaFileDownload, FaEdit, FaTrash } from 'react-icons/fa';
+import { GrFormPrevious,GrFormNext } from "react-icons/gr";
+import FilterComponent from "./FilterComponent";
 
 const TablaAdmin = ()=>{
     const [invoices,setInvoices]=useState(null)
@@ -13,9 +16,18 @@ const TablaAdmin = ()=>{
     const [offset,setOffset]=useState(0) //offset
     const [cantidad,setCantidad]=useState(null)
     const [limit,setLimit]=useState(10)
+    const [filtros,setFiltros]=useState({
+      
+    })
 
+  
+    
+  const handleLimitChange = (event) => {
+    setLimit(parseInt(event.target.value));
+    setOffset(0); // Reset the offset to 0 when limit changes
+  };
 
-    const cambiarPagina=(operador)=>{
+  const cambiarPagina=(operador)=>{
 
         if(operador =='+'){
             setOffset(offset+limit)
@@ -27,6 +39,12 @@ const TablaAdmin = ()=>{
 
     }
 
+    const cambiarFiltros = (f)=>{
+     
+      setFiltros(f)
+
+    }
+      console.log(filtros);
 
 
     useEffect(()=>{
@@ -34,39 +52,123 @@ const TablaAdmin = ()=>{
     const cargarDatos = async () => {
         const id = logged.user.id
         const token = obtenerToken();
-        const numeroRegistros = await getCountInvoices(token)
+        const numeroRegistros = await getCountInvoicesAdminFilters(token,filtros)
+
         setCantidad(numeroRegistros.total_filas)
-        console.log(numeroRegistros)
         //cantidad/limit
-        const facturas = await getAllInvoicesAdmin(token, limit, offset);
+        const facturas = await getAllInvoicesAdmin(token, limit, offset, filtros);
         setInvoices(facturas); // Actualiza el estado con los datos recibidos
         console.log(facturas)
       };
       cargarDatos();
-    }, [logged,offset]);
+    }, [logged,offset,limit,filtros]);
+
+    const formatDate = (dateString) => {
+      const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+      return new Date(dateString).toLocaleDateString('es-ES', options);
+    };
 
 
-    if (invoices != null) return (
-        <div >
-          <h2>HISTORIAL PEDIDOS</h2>
-          {invoices.length == 0 && <p>TODAVÍA NO HAS HECHO NINGÚN PEDIDO</p>}
-          {invoices.map((order) => {
-            return (
-                <div  >
-                  <p>Nº PEDIDO: {order.id}</p>
-                  
-                  <p>{order.company}</p>
-                </div>          
-            )
-          })}
-          <button onClick={()=>cambiarPagina('+')}>+</button>
-          <p>{(offset!=0)?offset/limit:offset}</p>
-          <button onClick={()=>cambiarPagina('-')}>-</button>
+    return(
+      <div className={style.tablacontenedor}>
+        <h2>PORTAL DE ADMINISTRADOR</h2>
+        <button>SUBIR FACTURA</button>
+        
+          <FilterComponent cambiarFiltros={(f)=>cambiarFiltros(f)}> </FilterComponent>
+
+      {invoices && invoices.length === 0 && <p>TODAVÍA NO HAY FACTURAS REGISTRADAS</p>}
+      
+      {invoices && invoices.length > 0 && (
+        <table className={style.table}>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nº FACTURA</th>
+              <th>PROVEEDOR</th>
+              <th>SOCIEDAD</th>
+              <th>FECHA FACTURA</th>
+              <th>FECHA REGISTRO</th>
+              <th>CONCEPTO</th>
+              <th>IMPORTE</th>
+              <th>ESTADO</th>
+              <th>REPORTAR ERROR</th>
+              <th>OPCIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            {invoices.map((order) => (
+              <tr key={order.id}>
+                <td>{order.id}</td>
+                <td>{order.invoice_number}</td>
+                <td>{order.development}</td>
+                <td>{order.company}</td>
+                <td>{formatDate(order.invoice_date)}</td>
+                <td>{formatDate(order.registration_date)}</td>
+                <td>{order.concept}</td>
+                <td>{order.amount} €</td>
+                <td><button>{order.status}</button></td>
+                <td>
+                  <button>Reportar</button>
+                </td>
+                <td className={style.iconos}>
+                  <FaFileDownload className={style.icono} />
+                  <FaEdit className={style.icono} />
+                  <FaTrash className={style.icono} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+      {invoices && invoices.length > 0 && (
+        <div className={style.pagination}>
+          {limit >0 && (
+            <> 
+            <span className={style.itemlimit} >Líneas por página</span> 
+            <select onChange={handleLimitChange} value={limit}>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+           </select>
+            </>
+           
+          )}
+          <p>{offset / limit + 1} de {Math.ceil(cantidad / limit)} página</p>
+          {offset > 0 && (
+            <button onClick={() => cambiarPagina('-')} className={style.btnsinestilo}><GrFormPrevious /></button>
+          )}
+          {offset + limit < cantidad && (
+            <button onClick={() => cambiarPagina('+')} className={style.btnsinestilo}><GrFormNext /></button>
+          )}
         </div>
-      )
-      else {
-        <p>No hay pedidos</p>
-      }
+      )}
+      </div>
+    )
+
+
+    // if (invoices != null) return (
+    //     <div >
+    //       <h2>PORTAL DE ADMINISTRADOR</h2>
+    //       <button>SUBIR FACTURA</button>
+
+    //       {invoices.length == 0 && <p>TODAVÍA NO HAS HECHO NINGÚN PEDIDO</p>}
+    //       {invoices.map((order) => {
+    //         return (
+    //             <div  >
+    //               <p>Nº PEDIDO: {order.id}</p>
+                  
+    //               <p>{order.company}</p>
+    //             </div>          
+    //         )
+    //       })}
+    //       <button onClick={()=>cambiarPagina('+')}>+</button>
+    //       <p>{(offset!=0)?offset/limit:offset}</p>
+    //       <button onClick={()=>cambiarPagina('-')}>-</button>
+    //     </div>
+    //   )
+    //   else {
+    //     <p>No hay facturas</p>
+    //   }
 
 }
 

@@ -73,9 +73,11 @@ export const tokenUser = async (token) => {
 // }
 
 
-export const getAllInvoicesNormal = async (token, id) => {
+export const getAllInvoicesNormal = async (token, id,limit, offset) => {
     const datos = {
-        user_id:id,
+        id,
+        limit,
+        offset
     };
     const url=`${import.meta.env.VITE_API}/invoicesfromuser`
     const response = await fetch(url, {
@@ -92,12 +94,17 @@ export const getAllInvoicesNormal = async (token, id) => {
 }
 
 
-export const getAllInvoicesAdmin = async (token,limit, offset) => {
+export const getAllInvoicesAdmin = async (token,limit, offset, filtros) => {
     const datos = {
         limit,
         offset,
+        numerofactura: filtros.numerofactura,
+        company: filtros.company
     };
-    const url=`${import.meta.env.VITE_API}/allinvoices`
+
+
+   
+    const url=`${import.meta.env.VITE_API}/allinvoicesadminlimitfilters`
     const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -113,8 +120,10 @@ export const getAllInvoicesAdmin = async (token,limit, offset) => {
 
 
 
-export const getCountInvoices = async (token) => {
-   
+export const getCountInvoicesNormal = async (token,id) => {
+    const datos = {
+        id,
+    };
     const url=`${import.meta.env.VITE_API}/countinvoices`
     const response = await fetch(url, {
         method: 'POST',
@@ -122,7 +131,29 @@ export const getCountInvoices = async (token) => {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
+        body:JSON.stringify(datos)
         
+    });
+    if(response.status==409) return {error:true,message:'Token no valido'}
+    const data = await response.json();
+    return data.data
+}
+
+
+export const getCountInvoicesAdminFilters = async (token,filtros) => {
+    const datos = {
+        numerofactura: filtros.numerofactura,
+        company: filtros.company
+    };
+    const url=`${import.meta.env.VITE_API}/countinvoicesadminfilters`
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body:JSON.stringify(datos)
+
     });
     if(response.status==409) return {error:true,message:'Token no valido'}
     const data = await response.json();

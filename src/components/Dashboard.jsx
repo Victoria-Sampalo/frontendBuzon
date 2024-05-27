@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import TablaNormal from "./TablaNormal";
 import TablaAdmin from "./TablaAdmin";
+import style from '../styles/Dashboard.module.css';
 
 
 const Dashboard = () =>{
@@ -16,10 +17,8 @@ const Dashboard = () =>{
     //console.log("logged " + logged)
     return(
         <>
-        <h2>Dashboard</h2>
         {logged.user.type=="admin" && <TablaAdmin></TablaAdmin>}
         {logged.user.type=="normal" && <TablaNormal></TablaNormal>}
-
         </>
 
     )

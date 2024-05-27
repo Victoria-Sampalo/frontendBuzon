@@ -13,10 +13,10 @@
     margin: 1rem;
     min-width: 250px;
     width: auto;
-    
-    margin: 0;
-        min-width: 350px;
-        width: 500px;
+    /* padding: 7.5rem 2rem; */
+    margin:7.5rem 2rem;
+    min-width: 350px;
+    width: 500px;
 }
 
 .loginContainer>h2{

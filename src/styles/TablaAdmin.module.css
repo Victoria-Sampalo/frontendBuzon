@@ -1,0 +1,101 @@
+.tablacontenedor{
+    width: 100%;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+h2{
+    font-size: 30pt;
+    color: var(--color-azul-oscuro);
+    padding:1rem;
+}
+.tablacontenedor {
+    padding: 20px;
+  }
+  
+  .table {
+    width: 100%;
+    /* max-width: 900px; Puedes ajustar el ancho máximo según sea necesario */
+    border-collapse: collapse;
+    margin-top: 20px;
+
+  }
+
+  .table tr{
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .table td {
+  
+    padding: 0.75rem;
+    text-align: center;
+  }
+  
+  .table th {
+    flex:100%;
+    border-bottom:2px solid var(--color-azul-oscuro);
+    padding:1rem;
+  }
+  
+  .table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .table tr:hover {
+    background-color: #ddd;
+  }
+
+
+  /* .table svg{
+    color: var(--color-azul-oscuro);
+    padding:0.5rem;
+    size: 10rem;
+  } */
+
+  .iconos {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-azul-oscuro);
+    display: flex;
+    gap: 1rem; /* Espacio entre los iconos */
+
+  }
+  
+  .icono {
+    font-size: 2rem; /* Tamaño de los iconos */
+  }
+
+
+/* ESTILOS PARA PAGINATION */
+
+.pagination{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding:2rem;
+    margin:1rem;
+    color:var(--color-azul-oscuro);
+    font-size: 14pt;
+    
+}
+
+
+.pagination span,
+.pagination p{
+    padding:0.5rem;
+}
+
+
+  button.btnsinestilo{
+    background-color: white;
+    color:var(--color-azul-oscuro);
+    font-size: 3rem;
+    
+  
+  }
+
