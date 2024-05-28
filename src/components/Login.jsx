@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "../styles/Login.module.css";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { validEmail, validPassword } from '../lib/valid';
 import { textErrors } from '../lib/textErrors';
 import { getPrueba, loggear } from '../lib/data';
@@ -60,7 +60,7 @@ const Login = () => {
                 const login= await loggear(email,pass);
                //const login= await getPrueba();
 
-                console.log(login)
+                //console.log(login)
                 if(login.error){
                     let auxErrores={...errores}
                     auxErrores['mensajeError']=login.message;
@@ -102,7 +102,8 @@ const Login = () => {
       </div>
       <p className="fuenteCourier enlace">¿Has olvidado tu contraseña?</p>
       <button onClick={() => loguear()}>Entrar</button>
-      <p className="enlace">CREAR CUENTA</p>
+      <Link to="/crearcuenta"><p className="enlace">CREAR CUENTA</p></Link>
+      
       <span className="errorSpan">{errores.mensajeError}</span>
     </div>
   );

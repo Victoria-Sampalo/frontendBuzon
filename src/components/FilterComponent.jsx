@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import style from "../styles/FilterComponent.module.css"; // Asegúrate de tener este archivo de estilos
 import { getAllDevelopment } from "../lib/data";
 import { obtenerToken } from '../lib/serviceToken.js'
+import { useNavigate } from "react-router-dom";
 const FilterComponent = ({ cambiarFiltros }) => {
   const [filters, setFilters] = useState({
     numerofactura: null,
@@ -9,12 +10,14 @@ const FilterComponent = ({ cambiarFiltros }) => {
     development: "",
   });
   const [developments, setDevelopments] = useState([]);
-
+  
   useEffect(() => {
     const fetchDevelopments = async () => {
       const token = obtenerToken();
       const devs = await getAllDevelopment(token);
+     
       setDevelopments(devs);
+
     };
     fetchDevelopments();
   }, []);

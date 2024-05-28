@@ -1,3 +1,4 @@
+
 export const validEmail = (email) => {
   // Expresión regular para validar una dirección de correo electrónico
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -32,8 +33,48 @@ export const validPassword = (pass) => {
   return true;
 };
 
-export const validString = (str) => {
+export const validText=(texto, longitudMinima, longitudMaxima, numerosycaracteresespeciales=false)=>{
+  // Verificar la longitud del texto
+  if (texto.length < longitudMinima || texto.length > longitudMaxima) {
+      return false;
+  }
 
-  // Si pasó ambas verificaciones, entonces el dato es un string válido
-  return true;
+  // Definir la expresión regular para caracteres permitidos (letras, números y espacios)
+  const regex =(numerosycaracteresespeciales) ?/^[a-zA-ZÀ-ÿ0-9\s,º:/()]+$/:/^[a-zA-ZÀ-ÿ\s]+$/;
+  return regex.test(texto);
 }
+
+export const validEmpresa=(texto, longitudMinima, longitudMaxima)=>{
+  // Verificar la longitud del texto
+  if (texto.length < longitudMinima || texto.length > longitudMaxima) {
+      return false;
+  }
+
+  // Definir la expresión regular para caracteres permitidos (letras, números y espacios)
+  const regex =/^[a-zA-ZÀ-ÿ0-9\s]+$/;
+  return regex.test(texto);
+}
+
+export const validPhone = (phone) => {
+  // Expresión regular para validar el teléfono
+  const phoneRegex = /^\+[0-9]{1,3}[0-9]{6}$/;
+
+  return phoneRegex.test(phone);
+};
+
+export const validCIF = (cif) => {
+  // Expresión regular para validar el CIF
+  const cifRegex = /^[ABCDEFGHJKLMNPQRSUVW]\d{7}[0-9A-J]$/;
+
+  return cifRegex.test(cif);
+};
+
+export const validPasswordRepeat=(str1,str2)=>{
+  return str1 === str2;
+}
+
+export const validUser=(respuesta)=>{
+  if(respuesta.error && respuesta.message.includes('token')) return false;
+  return respuesta
+}
+

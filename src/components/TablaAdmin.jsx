@@ -1,83 +1,93 @@
 import { useLogin } from "../hooks/useLogin";
 import { useState, useEffect } from "react";
 // import styles from "../styles/Login.module.css";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { obtenerToken } from "../lib/serviceToken";
-import { getAllInvoicesAdmin, getCountInvoicesAdminFilters } from "../lib/data";
-import style from '../styles/TablaAdmin.module.css';
-import { FaFileDownload, FaEdit, FaTrash } from 'react-icons/fa';
-import { GrFormPrevious,GrFormNext } from "react-icons/gr";
+import {
+  getAllInvoicesAdmin,
+  getCountInvoicesAdminFilters,
+  tokenUser,
+} from "../lib/data";
+import style from "../styles/TablaAdmin.module.css";
+import { FaFileDownload, FaEdit, FaTrash } from "react-icons/fa";
+import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import FilterComponent from "./FilterComponent";
 
-const TablaAdmin = ()=>{
-    const [invoices,setInvoices]=useState(null)
-    const { logged } = useLogin()
-    const navigate = useNavigate()
-    const [offset,setOffset]=useState(0) //offset
-    const [cantidad,setCantidad]=useState(null)
-    const [limit,setLimit]=useState(10)
-    const [filtros,setFiltros]=useState({
-      
-    })
+const TablaAdmin = () => {
+  const [invoices, setInvoices] = useState(null);
+  const { logged,logout } = useLogin();
+  const navigate = useNavigate();
+  const [offset, setOffset] = useState(0); //offset
+  const [cantidad, setCantidad] = useState(null);
+  const [limit, setLimit] = useState(10);
+  const [filtros, setFiltros] = useState({});
 
-  
-    
   const handleLimitChange = (event) => {
     setLimit(parseInt(event.target.value));
     setOffset(0); // Reset the offset to 0 when limit changes
   };
 
-  const cambiarPagina=(operador)=>{
-
-        if(operador =='+'){
-            setOffset(offset+limit)
-
-        }else{
-            setOffset(offset-limit)
-
-        }
-
+  const cambiarPagina = (operador) => {
+    if (operador == "+") {
+      setOffset(offset + limit);
+    } else {
+      setOffset(offset - limit);
     }
+  };
 
-    const cambiarFiltros = (f)=>{
-     
-      setFiltros(f)
+  const cambiarFiltros = (f) => {
+    setFiltros(f);
+  };
+  console.log(filtros);
 
-    }
-      console.log(filtros);
-
-
-    useEffect(()=>{
-    if (!logged.estaLogueado) navigate('/')
+  useEffect(() => {
+    if (!logged.estaLogueado) navigate("/login");
     const cargarDatos = async () => {
-        const id = logged.user.id
-        const token = obtenerToken();
-        const numeroRegistros = await getCountInvoicesAdminFilters(token,filtros)
+      const id = logged.user.id;
+      const token = obtenerToken();
+      let esTokenValid = await tokenUser(token);
+      //console.log(esTokenValid);
+      if (esTokenValid.error) {
+       logout()
+      } else {
+        const numeroRegistros = await getCountInvoicesAdminFilters(
+          token,
+          filtros
+        );
 
-        setCantidad(numeroRegistros.total_filas)
+        setCantidad(numeroRegistros.total_filas);
         //cantidad/limit
-        const facturas = await getAllInvoicesAdmin(token, limit, offset, filtros);
+        const facturas = await getAllInvoicesAdmin(
+          token,
+          limit,
+          offset,
+          filtros
+        );
+
         setInvoices(facturas); // Actualiza el estado con los datos recibidos
-        console.log(facturas)
-      };
-      cargarDatos();
-    }, [logged,offset,limit,filtros]);
-
-    const formatDate = (dateString) => {
-      const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-      return new Date(dateString).toLocaleDateString('es-ES', options);
+        console.log(facturas);
+      }
     };
+    cargarDatos();
+  }, [logged, offset, limit, filtros]);
 
+  const formatDate = (dateString) => {
+    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+    return new Date(dateString).toLocaleDateString("es-ES", options);
+  };
 
-    return(
-      <div className={style.tablacontenedor}>
-        <h2>PORTAL DE ADMINISTRADOR</h2>
-        <button>SUBIR FACTURA</button>
-        
-          <FilterComponent cambiarFiltros={(f)=>cambiarFiltros(f)}> </FilterComponent>
+  return (
+    <div className={style.tablacontenedor}>
+      <button>SUBIR FACTURA</button>
 
-      {invoices && invoices.length === 0 && <p>TODAVÍA NO HAY FACTURAS REGISTRADAS</p>}
-      
+      <FilterComponent cambiarFiltros={(f) => cambiarFiltros(f)}>
+        {" "}
+      </FilterComponent>
+
+      {invoices && invoices.length === 0 && (
+        <p>TODAVÍA NO HAY FACTURAS REGISTRADAS</p>
+      )}
+
       {invoices && invoices.length > 0 && (
         <table className={style.table}>
           <thead>
@@ -106,7 +116,15 @@ const TablaAdmin = ()=>{
                 <td>{formatDate(order.registration_date)}</td>
                 <td>{order.concept}</td>
                 <td>{order.amount} €</td>
-                <td><span className={`${style.spanstatus} ${style[order.status.toLowerCase()]}`}>{order.status}</span></td>
+                <td>
+                  <span
+                    className={`${style.spanstatus} ${
+                      style[order.status.toLowerCase()]
+                    }`}
+                  >
+                    {order.status}
+                  </span>
+                </td>
                 <td>
                   <button className={style.btnError}>Reportar</button>
                 </td>
@@ -122,29 +140,39 @@ const TablaAdmin = ()=>{
       )}
       {invoices && invoices.length > 0 && (
         <div className={style.pagination}>
-          {limit >0 && (
-            <> 
-            <span className={style.itemlimit} >Líneas por página</span> 
-            <select onChange={handleLimitChange} value={limit}>
-            <option value={10}>10</option>
-            <option value={20}>20</option>
-            <option value={50}>50</option>
-           </select>
+          {limit > 0 && (
+            <>
+              <span className={style.itemlimit}>Líneas por página</span>
+              <select onChange={handleLimitChange} value={limit}>
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+              </select>
             </>
-           
           )}
-          <p>{offset / limit + 1} de {Math.ceil(cantidad / limit)} página</p>
+          <p>
+            {offset / limit + 1} de {Math.ceil(cantidad / limit)} página
+          </p>
           {offset > 0 && (
-            <button onClick={() => cambiarPagina('-')} className={style.btnsinestilo}><GrFormPrevious /></button>
+            <button
+              onClick={() => cambiarPagina("-")}
+              className={style.btnsinestilo}
+            >
+              <GrFormPrevious />
+            </button>
           )}
           {offset + limit < cantidad && (
-            <button onClick={() => cambiarPagina('+')} className={style.btnsinestilo}><GrFormNext /></button>
+            <button
+              onClick={() => cambiarPagina("+")}
+              className={style.btnsinestilo}
+            >
+              <GrFormNext />
+            </button>
           )}
         </div>
       )}
-      </div>
-    )
-
-}
+    </div>
+  );
+};
 
 export default TablaAdmin;

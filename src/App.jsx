@@ -7,6 +7,7 @@ import { useLogin } from './hooks/useLogin.jsx';
 import Dashboard from './components/Dashboard';
 import { obtenerToken } from './lib/serviceToken.js'
 import { tokenUser } from './lib/data';
+import Crearcuenta from './components/CrearCuenta';
 const App = () => {
   const {cambiarLogged, logged, logout}=useLogin()
 
@@ -41,6 +42,7 @@ const App = () => {
         <Routes>
         <Route path="/" element={<Dashboard/>} />
         <Route path="/login" element={<Login/>} />
+        <Route path="/crearcuenta" element={<Crearcuenta/>} />
         </Routes>
 
        </main> 

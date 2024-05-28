@@ -24,6 +24,7 @@ export function LoggedProvider({ children }) {
         setLogged(auxLogged)
     }
 
+    
     return (
         <LoggedContext.Provider value={{
             logged,
