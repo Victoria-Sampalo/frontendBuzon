@@ -139,10 +139,10 @@ const TablaAdmin = () => {
         </table>
       )}
       {invoices && invoices.length > 0 && (
-        <div className={style.pagination}>
+        <div className="pagination">
           {limit > 0 && (
             <>
-              <span className={style.itemlimit}>Líneas por página</span>
+              <span className="itemlimit">Líneas por página</span>
               <select onChange={handleLimitChange} value={limit}>
                 <option value={10}>10</option>
                 <option value={20}>20</option>
@@ -156,7 +156,7 @@ const TablaAdmin = () => {
           {offset > 0 && (
             <button
               onClick={() => cambiarPagina("-")}
-              className={style.btnsinestilo}
+              className="btnsinestilo"
             >
               <GrFormPrevious />
             </button>
@@ -164,7 +164,7 @@ const TablaAdmin = () => {
           {offset + limit < cantidad && (
             <button
               onClick={() => cambiarPagina("+")}
-              className={style.btnsinestilo}
+              className="btnsinestilo"
             >
               <GrFormNext />
             </button>

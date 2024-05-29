@@ -59,23 +59,6 @@ export const tokenUser = async (token) => {
   }
 };
 
-// export const historyOrders = async (token, id) => {
-//     const datos = {
-//         id:id,
-//     };
-//     const url=`${import.meta.env.VITE_API}/orders`
-//     const response = await fetch(url, {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'Authorization': `Bearer ${token}`
-//         },
-//         body:JSON.stringify(datos)
-//     });
-//     if(response.status==409) return {error:true,message:'Token no valido'}
-//     const data = await response.json();
-//     return data.data
-// }
 
 export const getAllInvoicesNormal = async (token, id, limit, offset) => {
   const datos = {
@@ -205,4 +188,82 @@ export const crearUsuarioAdmin = async (token, datos)=>{
   console.log(data);
   if(data.error) return data
   return data.data;
+}
+
+//Función que me traiga todos los usuarios registrados
+export const getCountUsersFilters=async (token)=>{
+  // const datos = {
+  //   limit,
+  //   offset,
+  // };
+
+  const url = `${import.meta.env.VITE_API}/countusers`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    // body: JSON.stringify(datos),
+  });
+  if (response.status == 409)
+    return { error: true, message: "Token no valido" };
+  const data = await response.json();
+  return data.data;
+}
+
+
+
+//Función que me traiga todos los usuarios registrados
+export const getAllUsersLimitFilters= async (token, limit, offset)=>{
+  const datos = {
+    limit,
+    offset,
+  };
+
+  const url = `${import.meta.env.VITE_API}/userslimitfilters`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(datos),
+  });
+  if (response.status == 409)
+    return { error: true, message: "Token no valido" };
+  const data = await response.json();
+  return data.data;
+
+}
+
+
+//Función que actualiza un usuario
+export const updateUser= async (token, user)=>{
+  const datos = {
+    id:user.id,
+    name:user.name,
+    company:user.company,
+    cif:user.cif,
+    phone:user.phone,
+    email:user.email,
+    password:user.password,
+    type:user.type,
+    user_status:user.user_status
+  };
+
+  const url = `${import.meta.env.VITE_API}/updateuser`;
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(datos),
+  });
+  if (response.status == 409)
+    return { error: true, message: "Token no valido" };
+  const data = await response.json();
+  return data.data;
+
 }

@@ -71,36 +71,8 @@ h2{
   }
 
 
-/* ESTILOS PARA PAGINATION */
 
-.pagination{
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding:2rem;
-    margin:1rem;
-    color:var(--color-azul-oscuro);
-    font-size: 14pt;
-    
-}
-
-
-.pagination span,
-.pagination p{
-    padding:0.5rem;
-}
-
-
-  button.btnsinestilo{
-    background-color: white;
-    color:var(--color-azul-oscuro);
-    font-size: 3rem;
-    
-  
-  }
-
-
+/* ESTILOS PARA ESTATUS */
   .spanstatus {
     padding: 0.5rem 1rem;
     border-radius: 5px;

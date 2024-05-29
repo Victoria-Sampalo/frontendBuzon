@@ -1,0 +1,21 @@
+.gestionusuarioscontendor{
+/* border:1px solid black; */
+width: 100%;
+
+}
+
+
+/* ESTILOS PARA LOS ICONOS DE LA TABLA */
+      
+  .iconos {
+    display: flex;
+    gap: 1rem;
+   
+  }
+  
+  .icono {
+    font-size: 2rem;
+    cursor: pointer;
+    color:var(--color-azul-oscuro)
+  }
+  

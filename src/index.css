@@ -70,6 +70,7 @@ main{
   padding:1rem;
   justify-content: center;
   align-items: center;
+  text-align: center;
 }
 
 
@@ -157,8 +158,52 @@ li {
 
 
 
+/* ESTILOS PARA PAGINACIÓN */
+
+.pagination{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  padding:2rem;
+  color:var(--color-azul-oscuro);
+  font-size: 14pt; 
+
+}
+
+.pagination span,
+.pagination p{
+   padding:0 0.5rem; 
+   margin-bottom:0;
+}
 
 
+button.btnsinestilo{
+  background-color: white;
+  color:var(--color-azul-oscuro);
+  font-size: 3rem;
+  
+}
+
+/* ESTILOS PARA TABLAS */
+.contenedor-tabla {
+  padding: 20px;
+}
+
+.tabla th,.tabla td{
+  color:var(--color-azul-oscuro);
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.tabla td{
+  padding: 0.75rem;
+    text-align: center;
+}
+
+
+/* MEDIA QUERIES */
 @media screen and (max-width: 750px) {
   #cabeceramostrarprecios {
     -webkit-box-orient: vertical;
@@ -171,3 +216,6 @@ li {
     padding:0 0;
   }
 }
+
+
+
