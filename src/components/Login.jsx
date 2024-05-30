@@ -7,23 +7,31 @@ import { getPrueba, loggear } from '../lib/data';
 import { useLogin } from '../hooks/useLogin';
 import { guardarToken } from '../lib/serviceToken';
 const Login = () => {
-    const {logged, cambiarLogged}=useLogin()
-    const [email, setEmail]=useState(null)
-    const [pass,setPass]=useState(null)
-    const [errores,setError]=useState({
-        email:null,
-        password:null
-    })
-   
-    const navigate=useNavigate()
+     // Obtener el estado de login y la función para cambiarlo del hook useLogin
+     const {logged, cambiarLogged} = useLogin();
+     // Definir los estados locales para email y password
+     const [email, setEmail] = useState(null);
+     const [pass, setPass] = useState(null);
+     // Definir el estado local para errores
+     const [errores, setError] = useState({
+         email: null,
+         password: null,
+         user_status: null,
+         mensajeError: null,
+     });
+    
+     // Inicializar el hook de navegación
+     const navigate = useNavigate();
+   // useEffect para redirigir si el usuario ya está logueado
     useEffect(()=>{
         console.log(logged)
        if(logged.estaLogueado) navigate('/');
       },[logged])
-
+// Manejar cambios en los inputs de email y password
     const handleChange=(e)=>{
         let auxErrores={...errores}
         auxErrores['mensajeError']=null
+          // Validar el email y actualizar el estado de errores
         if(e.target.name=='email') 
         {   
             if(!validEmail(e.target.value)){            
@@ -36,6 +44,7 @@ const Login = () => {
 
             setEmail(e.target.value)
         }
+          // Validar la contraseña y actualizar el estado de errores
         if(e.target.name=='pass') 
             {
                 if(!validPassword(e.target.value)){            
@@ -48,24 +57,30 @@ const Login = () => {
                 setPass(e.target.value)
             }
     }
-
+   // Función para manejar el login
     const loguear=async ()=>{
+       // Verificar que no haya errores de validación
         if(errores.email==null && errores.password==null){
+           // Verificar que email y password no sean nulos
             if(email==null || pass==null) {
                 let auxErrores={...errores}
                 if(email==null) auxErrores['email']=textErrors('vacio')
                 if(pass==null) auxErrores['password']=textErrors('vacio')
                 setError(auxErrores)
             } else{
+               // Intentar loguear con el email y password proporcionados
                 const login= await loggear(email,pass);
                //const login= await getPrueba();
-
-                //console.log(login)
+              console.log("-.-----------------------------------------");
+                console.log(login)
                 if(login.error){
+                  // Si hay un error en el login, actualizar el estado de errores
                     let auxErrores={...errores}
+                    console.log(auxErrores);
                     auxErrores['mensajeError']=login.message;
                     setError(auxErrores)
                 } else {
+                   // Si el login es exitoso, cambiar el estado de login y guardar el token
                     cambiarLogged(login.usuario)
                     guardarToken(login.token)
                     navigate('/')

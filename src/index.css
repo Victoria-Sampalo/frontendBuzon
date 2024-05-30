@@ -187,8 +187,15 @@ button.btnsinestilo{
 }
 
 /* ESTILOS PARA TABLAS */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  /* border:1px solid blue; */
+}
 .contenedor-tabla {
   padding: 20px;
+  width: 100%;
+  overflow-x: auto;
 }
 
 .tabla th,.tabla td{
@@ -197,9 +204,18 @@ button.btnsinestilo{
   margin-top: 20px;
 }
 
+.tabla input[type="text"], .tabla input[type="password"],.tabla select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5em;
+}
+
+
+
 .tabla td{
   padding: 0.75rem;
     text-align: center;
+    white-space: nowrap;
 }
 
 

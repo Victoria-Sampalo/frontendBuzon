@@ -27,8 +27,12 @@ export const loggear = async (email, password) => {
     body: JSON.stringify(datos),
   });
 
+  if (response.status == 403)
+      return { error: true, message: "Usuario inactivo, un administrador debe activarlo"};
+
+
   if (response.status != 200)
-    return { error: true, message: "Usuario o contraseña incorrecta" };
+  return { error: true, message: "Usuario o contraseña incorrecta" };
   const data = await response.json();
   return data.data;
 };
@@ -58,7 +62,6 @@ export const tokenUser = async (token) => {
     return data.data;
   }
 };
-
 
 export const getAllInvoicesNormal = async (token, id, limit, offset) => {
   const datos = {
@@ -160,17 +163,16 @@ export const getAllDevelopment = async (token) => {
   return data.data;
 };
 
-
-export const crearUsuarioAdmin = async (token, datos)=>{
+export const crearUsuarioAdmin = async (token, datos) => {
   const usuario = {
     name: datos.nombre,
     company: datos.empresa,
     CIF: datos.cif,
     phone: datos.telefono,
-    email:datos.email,
+    email: datos.email,
     password: datos.password,
-    user_type: (datos.type==null)? 'normal' : datos.type,
-    user_status: (datos.status==null)? false : datos.status,
+    user_type: datos.type == null ? "normal" : datos.type,
+    user_status: datos.status == null ? false : datos.status,
   };
   const url = `${import.meta.env.VITE_API}/createuser`;
   const response = await fetch(url, {
@@ -183,15 +185,15 @@ export const crearUsuarioAdmin = async (token, datos)=>{
   });
   if (response.status == 409)
     return { error: true, message: "Token no valido" };
-  
+
   const data = await response.json();
   console.log(data);
-  if(data.error) return data
+  if (data.error) return data;
   return data.data;
-}
+};
 
 //Función que me traiga todos los usuarios registrados
-export const getCountUsersFilters=async (token)=>{
+export const getCountUsersFilters = async (token) => {
   // const datos = {
   //   limit,
   //   offset,
@@ -210,12 +212,10 @@ export const getCountUsersFilters=async (token)=>{
     return { error: true, message: "Token no valido" };
   const data = await response.json();
   return data.data;
-}
-
-
+};
 
 //Función que me traiga todos los usuarios registrados
-export const getAllUsersLimitFilters= async (token, limit, offset)=>{
+export const getAllUsersLimitFilters = async (token, limit, offset) => {
   const datos = {
     limit,
     offset,
@@ -234,22 +234,20 @@ export const getAllUsersLimitFilters= async (token, limit, offset)=>{
     return { error: true, message: "Token no valido" };
   const data = await response.json();
   return data.data;
-
-}
-
+};
 
 //Función que actualiza un usuario
-export const updateUser= async (token, user)=>{
+export const updateUser = async (token, user) => {
   const datos = {
-    id:user.id,
-    name:user.name,
-    company:user.company,
-    cif:user.cif,
-    phone:user.phone,
-    email:user.email,
-    password:user.password,
-    type:user.type,
-    user_status:user.user_status
+    id: user.id,
+    name: user.name,
+    company: user.company,
+    cif: user.cif,
+    phone: user.phone,
+    email: user.email,
+    password: user.password,
+    type: user.type,
+    user_status: user.user_status,
   };
 
   const url = `${import.meta.env.VITE_API}/updateuser`;
@@ -265,5 +263,4 @@ export const updateUser= async (token, user)=>{
     return { error: true, message: "Token no valido" };
   const data = await response.json();
   return data.data;
-
-}
+};
