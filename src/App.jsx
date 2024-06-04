@@ -10,8 +10,6 @@ import { tokenUser } from './lib/data';
 import Crearcuenta from './components/CrearCuenta';
 const App = () => {
   const {cambiarLogged, logged, logout}=useLogin()
-
-
   useEffect(()=>{
     const cargarDatos = async () => {
      // console.log(logged)

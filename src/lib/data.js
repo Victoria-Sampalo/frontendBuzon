@@ -63,11 +63,14 @@ export const tokenUser = async (token) => {
   }
 };
 
-export const getAllInvoicesNormal = async (token, id, limit, offset) => {
+export const getAllInvoicesNormal = async (token, id, limit, offset, filtros) => {
   const datos = {
     id,
     limit,
     offset,
+    numerofactura: filtros.numerofactura,
+    company: filtros.company,
+    development: filtros.development,
   };
   const url = `${import.meta.env.VITE_API}/invoicesfromuser`;
   const response = await fetch(url, {
@@ -108,9 +111,12 @@ export const getAllInvoicesAdmin = async (token, limit, offset, filtros) => {
   return data.data;
 };
 
-export const getCountInvoicesNormal = async (token, id) => {
+export const getCountInvoicesNormal = async (token, id, filtros ) => {
   const datos = {
     id,
+    numerofactura: filtros.numerofactura,
+    company: filtros.company,
+    development: filtros.development,
   };
   const url = `${import.meta.env.VITE_API}/countinvoices`;
   const response = await fetch(url, {

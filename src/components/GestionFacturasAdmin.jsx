@@ -8,12 +8,12 @@ import {
   getCountInvoicesAdminFilters,
   tokenUser,
 } from "../lib/data";
-import style from "../styles/TablaAdmin.module.css";
+import style from "../styles/GestionFacturasAdmin.module.css";
 import { FaFileDownload, FaEdit, FaTrash } from "react-icons/fa";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import FilterComponent from "./FilterComponent";
 
-const TablaAdmin = () => {
+const GestionFacturasAdmin = () => {
   const [invoices, setInvoices] = useState(null);
   const { logged,logout } = useLogin();
   const navigate = useNavigate();
@@ -175,4 +175,4 @@ const TablaAdmin = () => {
   );
 };
 
-export default TablaAdmin;
+export default GestionFacturasAdmin;
