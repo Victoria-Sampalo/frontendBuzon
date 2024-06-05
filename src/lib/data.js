@@ -154,6 +154,61 @@ export const getCountInvoicesAdminFilters = async (token, filtros) => {
   return data.data;
 };
 
+//Función que sube una factura 
+export const createInvoice = async (token, datos) => {
+  const factura = {
+      user_id: datos.user_id,
+      invoice_number: datos.invoice_number,
+      development: datos.development,
+      company: datos.company,
+      invoice_date: datos.invoice_date,
+      status: datos.status,
+      concept: datos.concept,
+      amount: datos.amount,
+  };
+  const url = `${import.meta.env.VITE_API}/createinvoice`;
+  const response = await fetch(url, {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(factura),
+  });
+  if (response.status === 409)
+      return { error: true, message: "Token no válido" };
+
+  const data = await response.json();
+  console.log(data);
+  if (data.error) return data;
+  return data.data;
+};
+
+//Función que sube un archivo pdf 
+export const uploadFile = async (token, file) => {
+  const url = `${import.meta.env.VITE_API}/upload`;
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'File upload failed');
+  }else{
+    console.log(response.json());
+  }
+
+  const data = await response.json();
+  return data;
+};
+
 export const getAllDevelopment = async (token) => {
   const url = `${import.meta.env.VITE_API}/alldevelopment`;
   const response = await fetch(url, {

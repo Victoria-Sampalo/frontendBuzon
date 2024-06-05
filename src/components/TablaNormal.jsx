@@ -8,6 +8,7 @@ import style from "../styles/GestionFacturasAdmin.module.css";
 import FilterComponent from "./FilterComponent";
 import { FaFileDownload, FaEdit, FaTrash } from "react-icons/fa";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
+import CrearFactura from './CrearFactura';
 
 
  const TablaNormal = ()=>{
@@ -18,6 +19,7 @@ import { GrFormPrevious, GrFormNext } from "react-icons/gr";
     const [cantidad,setCantidad]=useState(null)
     const [limit,setLimit]=useState(10)
     const [filtros, setFiltros] = useState({});
+    const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
     const handleLimitChange = (event) => {
       setLimit(parseInt(event.target.value));
@@ -77,7 +79,10 @@ import { GrFormPrevious, GrFormNext } from "react-icons/gr";
       return (
         <div className={style.tablacontenedor}>
           <h2>HISTORIAL DE FACTURAS USUARIO</h2>
-          <button>SUBIR FACTURA</button>
+          <button onClick={() => setMostrarFormulario(!mostrarFormulario)}>
+                {mostrarFormulario ? 'CERRAR FORMULARIO' : 'SUBIR FACTURA'}
+            </button>
+            {mostrarFormulario && <CrearFactura user_id={logged.user.id} />}
     
           <FilterComponent cambiarFiltros={(f) => cambiarFiltros(f)}>
             {" "}

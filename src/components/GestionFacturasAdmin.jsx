@@ -12,6 +12,8 @@ import style from "../styles/GestionFacturasAdmin.module.css";
 import { FaFileDownload, FaEdit, FaTrash } from "react-icons/fa";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import FilterComponent from "./FilterComponent";
+import CrearFactura from './CrearFactura';
+
 
 const GestionFacturasAdmin = () => {
   const [invoices, setInvoices] = useState(null);
@@ -21,6 +23,7 @@ const GestionFacturasAdmin = () => {
   const [cantidad, setCantidad] = useState(null);
   const [limit, setLimit] = useState(10);
   const [filtros, setFiltros] = useState({});
+  const [mostrarCrearFactura, setMostrarCrearFactura] = useState(false); 
 
   const handleLimitChange = (event) => {
     setLimit(parseInt(event.target.value));
@@ -76,9 +79,19 @@ const GestionFacturasAdmin = () => {
     return new Date(dateString).toLocaleDateString("es-ES", options);
   };
 
+  const handleOpenCrearFactura = () => {
+    console.log("click ");
+    setMostrarCrearFactura(true); 
+  };
+
+  
+
   return (
     <div className={style.tablacontenedor}>
-      <button>SUBIR FACTURA</button>
+      <button onClick={handleOpenCrearFactura}>SUBIR FACTURA</button>
+
+      {mostrarCrearFactura && <CrearFactura />}
+
 
       <FilterComponent cambiarFiltros={(f) => cambiarFiltros(f)}>
         {" "}

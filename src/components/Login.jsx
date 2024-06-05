@@ -80,6 +80,7 @@ const Login = () => {
                     auxErrores['mensajeError']=login.message;
                     setError(auxErrores)
                 } else {
+                  console.log("login "+ login.usuario)
                    // Si el login es exitoso, cambiar el estado de login y guardar el token
                     cambiarLogged(login.usuario)
                     guardarToken(login.token)
