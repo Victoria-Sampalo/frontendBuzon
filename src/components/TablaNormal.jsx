@@ -3,12 +3,20 @@ import { useState, useEffect } from "react";
 // import styles from "../styles/Login.module.css";
 import { useNavigate } from 'react-router-dom';
 import { obtenerToken } from "../lib/serviceToken";
-import { getAllInvoicesNormal, getCountInvoicesNormal,tokenUser } from "../lib/data";
+import { getAllInvoicesNormal, getCountInvoicesNormal,tokenUser, downloadFile } from "../lib/data";
 import style from "../styles/GestionFacturasAdmin.module.css";
 import FilterComponent from "./FilterComponent";
 import { FaFileDownload, FaEdit, FaTrash } from "react-icons/fa";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import CrearFactura from './CrearFactura';
+
+const getMonthName = (dateString) => {
+  const date = new Date(dateString);
+  const monthNames = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
+  return monthNames[date.getMonth()];
+};
+
+
 
 
  const TablaNormal = ()=>{
@@ -56,7 +64,7 @@ import CrearFactura from './CrearFactura';
         setCantidad(numeroRegistros.total_filas)
         
 
-        console.log("id" + id + "\nlimit" + limit + "\noffset" + offset)
+        //console.log("id" + id + "\nlimit" + limit + "\noffset" + offset)
        
         //cantidad/limit
         const facturas = await getAllInvoicesNormal(token,id, limit, offset, filtros);
@@ -75,6 +83,25 @@ import CrearFactura from './CrearFactura';
       return new Date(dateString).toLocaleDateString("es-ES", options);
     };
       console.log(invoices)
+
+      const handleDownload = async (invoiceNumber, invoiceDate) => {
+        const token = obtenerToken();
+        const nombreMes = getMonthName(invoiceDate);
+        const nombreArchivo = `${invoiceNumber}-${nombreMes}.pdf`;
+        console.log("Nombre archivo "+ nombreArchivo );
+    
+        try {
+          const response = await downloadFile(token, nombreArchivo);
+          if (response.error) {
+            console.error("Error al descargar el archivo:", response.message);
+          } else {
+            window.open(response.url, "_blank");
+          }
+        } catch (error) {
+          console.error("Error al descargar el archivo:", error);
+        }
+      };
+
 
       return (
         <div className={style.tablacontenedor}>
@@ -133,8 +160,10 @@ import CrearFactura from './CrearFactura';
                       <button className={style.btnError}>Reportar</button>
                     </td>
                     <td className={style.iconos}>
-                      <FaFileDownload className={style.icono} />
-                      
+                    <FaFileDownload 
+                    className={style.icono} 
+                    onClick={() => handleDownload(order.invoice_number, order.invoice_date)}
+                  />
                     </td>
                   </tr>
                 ))}

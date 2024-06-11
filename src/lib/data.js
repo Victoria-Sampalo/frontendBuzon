@@ -185,10 +185,11 @@ export const createInvoice = async (token, datos) => {
 };
 
 //Función que sube un archivo pdf 
-export const uploadFile = async (token, file) => {
+export const uploadFile = async (token, file, invoiceNumber) => {
   const url = `${import.meta.env.VITE_API}/upload`;
   const formData = new FormData();
   formData.append('file', file);
+  formData.append('invoice_number', invoiceNumber); // Agregar invoice_number al FormData
 
   const response = await fetch(url, {
     method: 'POST',
@@ -201,8 +202,31 @@ export const uploadFile = async (token, file) => {
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(errorData.message || 'File upload failed');
-  }else{
+  } else {
     console.log(response.json());
+  }
+
+  const data = await response.json();
+  return data;
+};
+
+
+//Función que descarga un archivo 
+export const downloadFile = async (token, invoiceNumber) => {
+  console.log("en lib/data "+invoiceNumber)
+  const url = `${import.meta.env.VITE_API}/downloadfile`;
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ nombreArchivo: invoiceNumber })
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Error al descargar el archivo');
   }
 
   const data = await response.json();

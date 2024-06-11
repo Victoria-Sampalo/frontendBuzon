@@ -33,6 +33,7 @@ const Crearfactura = ({ user_id }) => {
   });
   const [file, setFile] = useState(null);
   const [fileError, setFileError] = useState(null);
+  const [invoiceNumber, setInvoiceNumber] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,7 +46,12 @@ const Crearfactura = ({ user_id }) => {
     auxErrores["mensajeError"] = null;
     let valido = false;
 
-    if (e.target.name === "invoice_number") valido = validText(e.target.value, 1, 50, false);
+    
+    if (e.target.name === "invoice_number") {
+      valido = validText(e.target.value, 1, 50, false);
+      setInvoiceNumber(e.target.value);
+    }
+
     if (e.target.name === "development") valido = validEmpresa(e.target.value, 1, 50);
     if (e.target.name === "company") valido = validEmpresa(e.target.value, 1, 50);
     if (e.target.name === "concept") valido = validText(e.target.value, 1, 200, false);
@@ -99,12 +105,13 @@ const Crearfactura = ({ user_id }) => {
 
         if (file) {
           try {
-            await uploadFile(token, file);
+            await uploadFile(token, file, invoiceNumber);
             setMensaje("Factura y archivo subidos con éxito.");
           } catch (err) {
             setErrores({ ...errores, mensajeError: 'Error uploading file' });
           }
         }
+
 
         setTimeout(() => navigate("/"), 2000); // Redirige después de 2 segundos
       }

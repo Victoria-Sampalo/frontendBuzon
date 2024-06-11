@@ -28,3 +28,13 @@ export const formatDateTime = (isoDateTime) => {
     return `${formattedDay}-${formattedMonth}-${year} ${formattedHours}:${formattedMinutes}`;
 
 }
+
+// utils.js (frontend)
+export const obtenerNombreMesPorFecha = (dateString) => {
+    const meses = [
+      "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO",
+      "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"
+    ];
+    const fecha = new Date(dateString);
+    return meses[fecha.getMonth()];
+  };
