@@ -108,7 +108,7 @@ const Crearfactura = ({ user_id }) => {
             await uploadFile(token, file, invoiceNumber);
             setMensaje("Factura y archivo subidos con éxito.");
           } catch (err) {
-            setErrores({ ...errores, mensajeError: 'Error uploading file' });
+            setErrores({ ...errores, mensajeError: 'Factura y archivo subidos con éxito.' });
           }
         }
 

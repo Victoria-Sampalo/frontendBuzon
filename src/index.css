@@ -129,6 +129,7 @@ button:hover{
 
 .enlace{
   color: var(--color-azul-oscuro);
+  padding-top:1rem;
 }
 
 .enlace:hover{

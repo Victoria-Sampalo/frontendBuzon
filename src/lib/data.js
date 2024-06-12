@@ -349,3 +349,33 @@ export const updateUser = async (token, user) => {
   const data = await response.json();
   return data.data;
 };
+
+
+export const updateInvoice = async (token, datos) => {
+  const auxDatos = {
+      id:datos.id,
+      user_id: datos.user_id,
+      invoice_number: datos.invoice_number,
+      development: datos.development,
+      company: datos.company,
+      invoice_date: datos.invoice_date,
+      status: datos.status,
+      concept: datos.concept,
+      amount: datos.amount,
+  };
+
+  const url = `${import.meta.env.VITE_API}/updateinvoice`;
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(auxDatos),
+  });
+  if (response.status == 409)
+    return { error: true, message: "Token no valido" };
+  const data = await response.json();
+  return data.data;
+};
+

@@ -6,13 +6,22 @@ import { obtenerToken } from "../lib/serviceToken";
 import {
   getAllInvoicesAdmin,
   getCountInvoicesAdminFilters,
-  tokenUser,
+  tokenUser, 
+  downloadFile,
+  updateInvoice
 } from "../lib/data";
 import style from "../styles/GestionFacturasAdmin.module.css";
-import { FaFileDownload, FaEdit, FaTrash } from "react-icons/fa";
+import { FaFileDownload, FaEdit, FaTrash,FaSave } from "react-icons/fa";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
+import { MdCancel } from "react-icons/md";
 import FilterComponent from "./FilterComponent";
 import CrearFactura from './CrearFactura';
+
+const getMonthName = (dateString) => {
+  const date = new Date(dateString);
+  const monthNames = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
+  return monthNames[date.getMonth()];
+};
 
 
 const GestionFacturasAdmin = () => {
@@ -24,6 +33,11 @@ const GestionFacturasAdmin = () => {
   const [limit, setLimit] = useState(10);
   const [filtros, setFiltros] = useState({});
   const [mostrarCrearFactura, setMostrarCrearFactura] = useState(false); 
+
+  const [editingInvoiceId, setEditingInvoiceId] = useState(null);
+  const [editedStatus, setEditedStatus] = useState("");
+
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleLimitChange = (event) => {
     setLimit(parseInt(event.target.value));
@@ -57,7 +71,7 @@ const GestionFacturasAdmin = () => {
           token,
           filtros
         );
-
+ 
         setCantidad(numeroRegistros.total_filas);
         //cantidad/limit
         const facturas = await getAllInvoicesAdmin(
@@ -84,7 +98,55 @@ const GestionFacturasAdmin = () => {
     setMostrarCrearFactura(true); 
   };
 
+  const handleDownload = async (invoiceNumber, invoiceDate) => {
+    const token = obtenerToken();
+    const nombreMes = getMonthName(invoiceDate);
+    const nombreArchivo = `${invoiceNumber}-${nombreMes}.pdf`;
+    console.log("Nombre archivo "+ nombreArchivo );
+
+    try {
+      const response = await downloadFile(token, nombreArchivo);
+      if (response.error) {
+        setErrorMessage(`Factura con id: '${invoiceNumber}' no ha sido encontrada en Dropbox. Consulte manualmente`);
+        console.error("Error al descargar el archivo:", response.message);
+      } else {
+        setErrorMessage(""); // Limpiar el mensaje de error en caso de éxito
+        window.open(response.url, "_blank");
+      }
+    } catch (error) {
+      setErrorMessage(`Factura con id: '${invoiceNumber}' no ha sido encontrada`);
+      console.error("Error al descargar el archivo:", error);
+    }
+};
+  const handleEditClick = (order) => {
+    setEditingInvoiceId(order.id);
+    setEditedStatus(order.status);
+  };
+
   
+  const handleSaveClick = async (id) => {
+    const token = obtenerToken();
+    const facturaEditada = invoices.find((invoice) => invoice.id === id);
+    facturaEditada.status = editedStatus;
+
+    try {
+      const response = await updateInvoice(token, facturaEditada);
+      if (response.error) {
+        console.error("Error al actualizar la factura:", response.message);
+      } else {
+        setEditingInvoiceId(null);
+        // Recargar las facturas después de guardar
+        const facturas = await getAllInvoicesAdmin(token, limit, offset, filtros);
+        setInvoices(facturas);
+      }
+    } catch (error) {
+      console.error("Error al actualizar la factura:", error);
+    }
+  };
+
+  const handleCancelClick = () => {
+    setEditingInvoiceId(null);
+  };
 
   return (
     <div className={style.tablacontenedor}>
@@ -96,6 +158,8 @@ const GestionFacturasAdmin = () => {
       <FilterComponent cambiarFiltros={(f) => cambiarFiltros(f)}>
         {" "}
       </FilterComponent>
+
+      {errorMessage && <p className={style.errorMessage}>{errorMessage}</p>}
 
       {invoices && invoices.length === 0 && (
         <p>TODAVÍA NO HAY FACTURAS REGISTRADAS</p>
@@ -130,21 +194,41 @@ const GestionFacturasAdmin = () => {
                 <td>{order.concept}</td>
                 <td>{order.amount} €</td>
                 <td>
-                  <span
-                    className={`${style.spanstatus} ${
-                      style[order.status.toLowerCase()]
-                    }`}
-                  >
-                    {order.status}
-                  </span>
+                  {editingInvoiceId === order.id ? (
+                    <select
+                      value={editedStatus}
+                      onChange={(e) => setEditedStatus(e.target.value)}
+                    >
+                      <option value="sent">Enviada</option>
+                      <option value="pending">Pendiente</option>
+                      <option value="paid">Pagada</option>
+                      <option value="error">Error</option>
+                      <option value="rejected">Rechazada</option>
+                    </select>
+                  ) : (
+                    <span
+                      className={`${style.spanstatus} ${style[order.status.toLowerCase()]}`}
+                    >
+                      {order.status}
+                    </span>
+                  )}
                 </td>
                 <td>
                   <button className={style.btnError}>Reportar</button>
                 </td>
                 <td className={style.iconos}>
-                  <FaFileDownload className={style.icono} />
-                  <FaEdit className={style.icono} />
-                  <FaTrash className={style.icono} />
+                  {editingInvoiceId === order.id ? (
+                    <>
+                      <FaSave className={style.icono} onClick={() => handleSaveClick(order.id)} />
+                      <MdCancel className={style.icono} onClick={handleCancelClick} />
+                    </>
+                  ) : (
+                    <>
+                       <FaFileDownload className={style.icono} onClick={() => handleDownload(order.invoice_number, order.invoice_date)} />
+                      <FaEdit className={style.icono} onClick={() => handleEditClick(order)} />
+                      <FaTrash className={style.icono} />
+                    </>
+                  )}
                 </td>
               </tr>
             ))}

@@ -131,3 +131,8 @@ h2{
     cursor: pointer;
   }
   
+
+  .errorMessage {
+    color: red;
+    margin: 10px 0;
+  }
